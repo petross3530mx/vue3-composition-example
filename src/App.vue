@@ -1,10 +1,9 @@
 <template>
   <div class="container">
-    <AddRecipe />
-
+    <AddRecipe :onAdd="AddRecipe"/>
     <div class="columns">
-      <RecipeList />
-      <RecipeDetail />
+      <RecipeList @select="selectRecipe" :recipes="recipes" />
+      <RecipeDetail :recipe="current" @remove="RemoveRecipe" />
     </div>
   </div>
 </template>
@@ -20,6 +19,25 @@ export default {
     AddRecipe,
     RecipeList,
     RecipeDetail
+  },
+  data(){
+    return{
+      recipes:[], 
+      current: null
+    }
+  },
+  methods:{
+    AddRecipe(recipe){
+      this.recipes.push(recipe)
+      console.log(this.recipes)
+    },
+    selectRecipe($id){
+      this.current = this.recipes.find(r=>r.id === $id)
+    },
+    RemoveRecipe(id){
+      this.current = null
+      this.recipes = this.recipes.filter(r=>r.id !== id)
+    }
   }
 }
 </script>
@@ -53,6 +71,9 @@ export default {
     text-decoration: underline;
   }
 
+  .empty{
+    padding: 4em;
+  }
 
   .container {
     max-width: 1000px;
